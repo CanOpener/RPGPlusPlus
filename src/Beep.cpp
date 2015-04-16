@@ -15,9 +15,8 @@ int main(int argc, char *argv[])
 	grassRect.y = 0;
 	grassRect.w = 800;
 	grassRect.h = 600;
-
-	int x = 0, y = 0;
-	Entity bob(200,200,x,y,"bob.png",renderer);
+	
+	Entity bob(200,200,100,180,"bob.png",renderer);
 
 	while (!quit && mainEvent->type != SDL_QUIT) 
 	{
@@ -27,9 +26,7 @@ int main(int argc, char *argv[])
 		SDL_RenderCopy(renderer, grass, NULL, &grassRect);
 		
 		bob.draw();
-		x++; y++;
-		bob.resize(x, y);
-
+		
 		SDL_RenderPresent(renderer);
 	}
 

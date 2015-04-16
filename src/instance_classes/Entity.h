@@ -9,6 +9,10 @@ private :
 	SDL_Renderer* renderer;
 	SDL_Texture* entityTexture;
 	SDL_Rect entityRect;
+	SDL_Rect healthBar;
+	SDL_Rect damageBar;
+
+	void calculateBars();
 
 public :
 	Entity(int px, int py, int sx, int sy, const char* img, SDL_Renderer* rend);
