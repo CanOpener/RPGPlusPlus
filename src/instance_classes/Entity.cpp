@@ -10,6 +10,8 @@ Entity::Entity(int px, int py, int sx, int sy, const char* img, SDL_Renderer* re
 	maxHP = HP = 100;
 	attackPower = 10;
 	defence = 14;
+
+	calculateBars();
 }
 
 Entity::~Entity()
@@ -26,8 +28,6 @@ void Entity::draw()
 {
 	SDL_RenderCopy(renderer, entityTexture, NULL, &entityRect);
 
-	calculateBars();
-
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 	SDL_RenderFillRect(renderer, &healthBar);
 	
@@ -41,19 +41,21 @@ void Entity::move(int x, int y)
 {
 	entityRect.x = x;
 	entityRect.y = y;
+	calculateBars();
 }
 
 void Entity::resize(int w, int h)
 {
 	entityRect.w = w;
 	entityRect.h = h;
+	calculateBars();
 }
 
 void Entity::calculateBars()
 {
 	healthBar.x = entityRect.x;
-	healthBar.y = damageBar.y = entityRect.y - 20;
-	healthBar.h = damageBar.h = 10;
+	healthBar.y = damageBar.y = entityRect.y - floorf((float)0.1 * (float)entityRect.h);
+	healthBar.h = damageBar.h = floorf((float)0.05 * (float)entityRect.h);
 
 	float percentageHealth = ( (float)HP / (float)maxHP );
 	healthBar.w = floorf(percentageHealth * entityRect.w);

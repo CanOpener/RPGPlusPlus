@@ -6,3 +6,4 @@
 #include <SDL_mixer.h>
 
 #include "Entity.h"
+#include "Player.h"

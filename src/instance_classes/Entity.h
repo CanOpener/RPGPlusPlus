@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 class Entity {
-private :
+protected :
 	int maxHP;
 	int HP;
 	int defence;
@@ -22,5 +22,4 @@ public :
 	void move(int x, int y);
 	void resize(int w, int h);
 	SDL_Rect* getRect();
-protected :
 };
