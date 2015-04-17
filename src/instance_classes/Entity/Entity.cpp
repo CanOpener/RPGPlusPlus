@@ -1,22 +1,25 @@
 #include "stdafx.h"
 
-Entity::Entity(int px, int py, int sx, int sy, const char* img, SDL_Renderer* rend)
+Entity::Entity()
+{
+	maxHP = HP = 100;
+	attackPower = 10;
+	defence = 14;
+}
+
+Entity::~Entity()
+{
+	SDL_DestroyTexture(entityTexture);
+}
+
+void Entity::init(int px, int py, int sx, int sy, const char* img, SDL_Renderer* rend)
 {
 	entityRect.x = px; entityRect.y = py;
 	entityRect.w = sx; entityRect.h = sy;
 
 	entityTexture = IMG_LoadTexture(rend, img);
 	renderer = rend;
-	maxHP = HP = 100;
-	attackPower = 10;
-	defence = 14;
-
-	calculateBars();
-}
-
-Entity::~Entity()
-{
-	SDL_DestroyTexture(entityTexture);
+	calculateHealthBar();
 }
 
 SDL_Rect* Entity::getRect() 
@@ -41,17 +44,17 @@ void Entity::move(int x, int y)
 {
 	entityRect.x = x;
 	entityRect.y = y;
-	calculateBars();
+	calculateHealthBar();
 }
 
 void Entity::resize(int w, int h)
 {
 	entityRect.w = w;
 	entityRect.h = h;
-	calculateBars();
+	calculateHealthBar();
 }
 
-void Entity::calculateBars()
+void Entity::calculateHealthBar()
 {
 	healthBar.x = entityRect.x;
 	healthBar.y = damageBar.y = entityRect.y - floorf((float)0.1 * (float)entityRect.h);
@@ -62,4 +65,44 @@ void Entity::calculateBars()
 
 	damageBar.x = healthBar.x + healthBar.w;
 	damageBar.w = entityRect.w - healthBar.w;
+}
+
+void Entity::setMaxHP(int MHP)
+{
+	maxHP = MHP;
+}
+
+int Entity::getMaxHP()
+{
+	return maxHP;
+}
+
+void Entity::setHP(int hp)
+{
+	HP = hp;
+}
+
+int Entity::getHP()
+{
+	return HP;
+}
+
+void Entity::setDefence(int d)
+{
+	defence = d;
+}
+
+int Entity::getDefence()
+{
+	return defence;
+}
+
+void Entity::setAttackPower(int ap)
+{
+	attackPower = ap;
+}
+
+int Entity::getAttackPower()
+{
+	return attackPower;
 }

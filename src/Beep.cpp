@@ -20,22 +20,29 @@ Player* bob = NULL;
 
 int main(int argc, char *argv[])
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 	window = SDL_CreateWindow("RPG++", 100, 100, WLENGTH, WHEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	grass = IMG_LoadTexture(renderer, "grass.bmp");
 	mainEvent = new SDL_Event();
 
-	bob = new Player("bob.png", renderer);
+	bob = new Player("bob.png", "Bob", renderer);
 
 	grassRect.x = 0; grassRect.y = 0;
 	grassRect.w = WLENGTH; grassRect.h = WHEIGHT;
 
+	int pastTime = SDL_GetTicks();
+
 	while (true) 
 	{
-		clear();
-		update();
-		render();
+		int currentTime = SDL_GetTicks();
+		if (currentTime - pastTime >= 1000 / 30)
+		{
+			pastTime = currentTime;
+			clear();
+			update();
+			render();
+		}
 	}
 
 
@@ -52,24 +59,57 @@ void render()
 
 void update()
 {
-	SDL_PollEvent(mainEvent);
-
-	switch (mainEvent->type)
+	while (SDL_PollEvent(mainEvent))
 	{
-	case SDL_QUIT :
-		quit();
-		return;
-	
-	case SDL_KEYDOWN :
-		bob->update(mainEvent);
-		return;
+		switch (mainEvent->type)
+		{
+		case SDL_QUIT:
+			quit();
+			return;
 
-	case SDL_KEYUP :
-		bob->update(mainEvent);
-		return;
+		case SDL_KEYDOWN:
+
+			switch (mainEvent->key.keysym.sym) 
+			{
+			case SDLK_w :
+				bob->updateMovementVariables(Player_Move_Enums::BTDOWN_UP);
+				break;
+			case SDLK_s:
+				bob->updateMovementVariables(Player_Move_Enums::BTDOWN_DOWN);
+				break;
+			case SDLK_a:
+				bob->updateMovementVariables(Player_Move_Enums::BTDOWN_LEFT);
+				break;
+			case SDLK_d:
+				bob->updateMovementVariables(Player_Move_Enums::BTDOWN_RIGHT);
+				break;
+			}
+
+			break;
+
+		case SDL_KEYUP:
+			
+			switch (mainEvent->key.keysym.sym)
+			{
+			case SDLK_w:
+				bob->updateMovementVariables(Player_Move_Enums::BTUP_UP);
+				break;
+			case SDLK_s:
+				bob->updateMovementVariables(Player_Move_Enums::BTUP_DOWN);
+				break;
+			case SDLK_a:
+				bob->updateMovementVariables(Player_Move_Enums::BTUP_LEFT);
+				break;
+			case SDLK_d:
+				bob->updateMovementVariables(Player_Move_Enums::BTUP_RIGHT);
+				break;
+			}
+
+			break;
+		}
 	}
 
-	bob->update(mainEvent);
+	bob->update();
 }
 
 void clear()
